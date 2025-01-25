@@ -2,317 +2,141 @@
 <html lang="en-us">
 
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-	<meta name="MobileOptimized" content="640" />
-	<meta name="HandheldFriendly" content="true" />
-	<title>Pixelsuft hl</title>
-	<script>
-		document.addEventListener('contextmenu', event => event.preventDefault());
-		window.onbeforeunload = function(e) {
-			// Cancel the event
-			e.preventDefault();
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="MobileOptimized" content="640">
+    <meta name="HandheldFriendly" content="true">
+    <title>Pixelsuft hl</title>
+    <script>
+        document.addEventListener('contextmenu', event => event.preventDefault());
 
-			// Chrome requires returnValue to be set
-			e.returnValue = 'Really want to quit the game?';
-		};
+        window.onbeforeunload = function (e) {
+            e.preventDefault();
+            e.returnValue = 'Really want to quit the game?';
+        };
 
-		//Prevent Ctrl+S (and Ctrl+W for old browsers and Edge)
-		document.onkeydown = function(e) {
-			e = e || window.event; //Get event
+        document.onkeydown = function (e) {
+            e = e || window.event;
+            if (!e.ctrlKey) return;
+            const code = e.which || e.keyCode;
+            if (code === 83 || code === 87) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        };
 
-			if (!e.ctrlKey) return;
+        let pashalka_count = 0;
+        const audio = new Audio('music.mp3');
 
-			var code = e.which || e.keyCode; //Get key code
+        function play_sound() {
+            if (pashalka_count === 40) audio.play();
+            if (pashalka_count < 100) pashalka_count += 1;
+        }
 
-			switch (code) {
-				case 83: //Block Ctrl+S
-				case 87: //Block Ctrl+W -- Not work in Chrome and new Firefox
-					e.preventDefault();
-					e.stopPropagation();
-					break;
-			}
-		};
-		var a = new Audio('music.mp3');
-		var pashalka_count = 0;
+        window.addEventListener('click', play_sound);
+        window.addEventListener('keydown', play_sound);
+    </script>
+    <style>
+        body {
+            background-color: #0d1117;
+            font-family: 'Segoe UI', sans-serif;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
 
-		function play_sound() {
-			if (pashalka_count == 40) a.play();
-			if (pashalka_count < 100) pashalka_count += 1;
-		}
-		window.addEventListener('click', play_sound);
-		window.addEventListener('keydown', play_sound);
-	</script>
-	<style>
-		body {
-			font-family: arial;
-			margin: 0;
-			padding: none;
-			background-color: #555555;
-			color: #f0b418;
-		}
+        h1 {
+            margin: 20px 0;
+        }
 
-		.emscripten {
-			padding-right: 0;
-			margin-left: auto;
-			margin-right: auto;
-			display: block;
-		}
+        a {
+            color: #4493f8;
+            text-decoration: none;
+            font-size: 1.2em;
+        }
 
-		div.emscripten {
-			text-align: center;
-		}
+        .container {
+            text-align: center;
+            padding: 20px;
+        }
 
-		div.emscripten_border {}
+        .github-buttons {
+            margin-top: 20px;
+        }
 
-		/* the canvas *must not* have any border or padding, or mouse coords will be wrong */
-		canvas.emscripten {
-			border: 0px none;
-			background-image: url(xd.png);
-			box-shadow: #ffa600 0px 0px 9px 4px;
-		}
+        @media (max-width: 600px) {
+            a {
+                font-size: 1em;
+            }
 
-		@-webkit-keyframes rotation {
-			from {
-				-webkit-transform: rotate(0deg);
-			}
-
-			to {
-				-webkit-transform: rotate(360deg);
-			}
-		}
-
-		@-moz-keyframes rotation {
-			from {
-				-moz-transform: rotate(0deg);
-			}
-
-			to {
-				-moz-transform: rotate(360deg);
-			}
-		}
-
-		@-o-keyframes rotation {
-			from {
-				-o-transform: rotate(0deg);
-			}
-
-			to {
-				-o-transform: rotate(360deg);
-			}
-		}
-
-		@keyframes rotation {
-			from {
-				transform: rotate(0deg);
-			}
-
-			to {
-				transform: rotate(360deg);
-			}
-		}
-
-
-		#controls {
-			display: inline-block;
-			float: right;
-			vertical-align: top;
-			margin-top: 5px;
-			margin-right: 20px;
-		}
-
-		#output {
-			width: 100%;
-			height: 200px;
-			margin: 0 auto;
-			margin-top: 10px;
-			border-left: 0px;
-			border-right: 0px;
-			border-style: solid;
-			padding-left: 0px;
-			padding-right: 0px;
-			display: none;
-			background-color: black;
-			color: rgba(0, 255, 0, 255);
-			font-family: 'Lucida Console', Monaco, monospace;
-			outline: none;
-			border-color: #f0B418;
-		}
-
-
-		.loader {
-			border: 4px solid #f3f3f3;
-			border-radius: 50%;
-			border-top: 4px solid #ffa600;
-			width: 16px;
-			height: 16px;
-			-webkit-animation: spin 2s linear infinite;
-			/* Safari */
-			animation: spin 2s linear infinite;
-		}
-
-		/* Safari */
-		@-webkit-keyframes spin {
-			0% {
-				-webkit-transform: rotate(0deg);
-			}
-
-			100% {
-				-webkit-transform: rotate(360deg);
-			}
-		}
-
-		@keyframes spin {
-			0% {
-				transform: rotate(0deg);
-			}
-
-			100% {
-				transform: rotate(360deg);
-			}
-		}
-
-
-
-		a.glow,
-		a.glow:hover,
-		a.glow:focus {
-			text-decoration: none;
-			color: #F0B418;
-			text-shadow: none;
-			-webkit-transition: 500ms linear 0s;
-			-moz-transition: 500ms linear 0s;
-			-o-transition: 500ms linear 0s;
-			transition: 500ms linear 0s;
-			outline: 0 none;
-			cursor: default;
-		}
-
-		a.glow:hover,
-		a.glow:focus {
-			color: #ffa600;
-			text-shadow: -1px 1px 8px #ffa600, 1px -1px 8px #ffa600;
-		}
-
-		input[type="button"i],
-		#label_file_select {
-			color: #f0b418;
-			background-color: #555555;
-			border: 2px solid #f0b418;
-			border-radius: 40px;
-			font-family: Segoe UI;
-			font-size: 20px;
-			transition: 0.5s all;
-		}
-
-		hr {
-			border-color: #ffa600;
-		}
-
-		input[type="button"i]:hover,
-		#label_file_select:hover {
-			color: #555555;
-			background-color: #f0b418;
-			font-size: 20px;
-		}
-
-		#label_file_select {
-			padding: 1px 6px;
-		}
-
-		input[type="file"i] {
-			display: none;
-		}
-
-		input[type="text"i] {
-			color: #f0b418;
-			background-color: #555555;
-			border: 2px solid #f0b418;
-			border-radius: 40px;
-			font-family: Segoe UI;
-			font-size: 15px;
-			transition: 0.5s all;
-		}
-
-		* {
-			cursor: default;
-			-webkit-user-select: none;
-			-moz-user-select: none;
-			-ms-user-select: none;
-			user-select: none;
-			outline: none;
-		}
-
-		if (document.createElement("detect").style.textShadow==="") {
-			document.getElementsByTagName("html")[0].className+=" textshadow";
-		}
-	</style>
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
 </head>
 
-<body onerror=alert(event); bgcolor=#555555 text=#F0B418 link=#ffa600 vlink=#ffa600>
-	<div class="emscripten_border">
-		<canvas style="display:none" class="emscripten" id="canvas" oncontextmenu="event.preventDefault()"></canvas>
-	</div>
+<center>
+<body bgcolor="#555555" text="#F0B418" link="#ffa600" vlink="#ffa600">
+    <div class="emscripten_border">
+        <canvas style="display:none" class="emscripten" id="canvas" oncontextmenu="event.preventDefault()"></canvas>
+    </div>
 
-	<p>
-	<div style=width:100%;height:0px>
-		<div style="float:left;" id="status">Downloading...</div>
-		<div id="progress1" style=position:relative;z-index:10;display:none;float:right;width:70%;border-color:#F0B418;border-style:solid;border-width:2px;height:20px>
-			<div id=progress style=text-align:center;background-color:#F0B418;border-color:#555555;border-style:solid:border-width:3px;width:50%;height:20px></div>
-		</div><br>
-	</div><br></p>
+    <div class="loader" id="loader1"></div>
 
-	<div class="loader" id=loader1></div>
+    <div style="width:100%;">
+        <span id="controls">
+            <a><span><label id="label_show_console_log" style="display: none;"><input type="checkbox" id="show_console_log">Show Console Log</label></span></a>
+            <a style="text-decoration: none;"><span><label><input type="checkbox" id="resize">Resize canvas</label></span></a>
+            <a style="text-decoration: none;"><span><label><input type="checkbox" id="pointerLock" checked>Lock/hide mouse pointer</label></span></a><br>
+            <span><input type="button" value="Fullscreen" onclick="Module.requestFullscreen(document.getElementById('pointerLock').checked, document.getElementById('resize').checked)"></span>
+        </span>
+    </div>
 
-	<div style=width:100%><span id='controls'>
-			<a class="glow"><span><label id="label_show_console_log" style="display: none;"><input type="checkbox" id="show_console_log">Show Console Log</label></span></a>
-			<a class="glow"><span><label><input type="checkbox" id="resize">Resize canvas</label></span></a>
-			<a class="glow"><span><label><input type="checkbox" id="pointerLock" checked>Lock/hide mouse pointer &nbsp;&nbsp;&nbsp;</label></span></a>
-			<span><input type="button" value="Fullscreen" onclick="Module.requestFullscreen(document.getElementById('pointerLock').checked, document.getElementById('resize').checked)"></span>
-		</span></div>
+    <textarea id="output" rows="8" style="display: none;"></textarea>
+    <div id="asyncDialog" style="float:left"></div>
 
-	<textarea id="output" rows="8" style="display: none;"></textarea>
-	<div id="asyncDialog" style="float:left"></div>
+    <p>
+        <div style="width:100%; height:0px;">
+            <div style="float:center;" id="status">Downloading...</div>
+            <div id="progress1" style="position:relative; z-index:10; display:none; float:right; width:70%; border-color:#2c2c2c; border-style:solid; border-width:2px; height:20px;">
+                <div id="progress" style="text-align:center; background-color:#ffffff; border-color:#2c2c2c; border-style:solid; border-width:3px; width:50%; height:20px;"></div>
+            </div><br>
+        </div><br>
+    </p>
 
-	<a class="glow">
-		<div id=optionsTitle>
-			<h1>Game Options</h1>
-		</div>
-	</a>
-	<form style=display:none id=fSettings>Select filesystem for settings and save and restore:<br><br>
-		<div id=idbHider style=display:none><label><input name=a type=radio id=rIndexedDB checked=true />IndexedDB (Need exit correctly to save changes)</label><br></div>
-		<label><input name=a type=radio id=rLocalStorage />LocalStorage (Sometimes not enough space)</label><br>
-		<label><input name=a type=radio id=rNone />None(in RAM)</label><br><br>
-		<hr>
-		Select game data source:<br><br>
-		<label>
-			<div id=pkgHider style=display:none><input name=b type=radio id=rPackage />Emscripten package from server (cached in IndexedDB if availiable)
-		</label><select id=selectPkg style=display:none></select><br></div>
-		<label>
-			<div id=zipHider style=display:none><input name=b type=radio id=rZip checked=true />ZIP archive from server (slow, but small, no IndexedDB cache)
-		</label><select id=selectZip style=display:none></select><br></div>
-		<label><input name=b type=radio id=rLocalZip />Local ZIP file:</label><label id="label_file_select"><input type=file name=c id=iZipFile />Select ZIP file</label><br><br>
-		<hr>
-		Command-line arguments: <input name=d type=text id=iArgs value="-dev 1 -game valve" /><br><br>
+    <a>
+        <div id="optionsTitle">
+            <h1>Game Options</h1>
+        </div>
+    </a>
 
-		<input type=button onclick="startXash();return false;" value="Launch Xash3D!" />
+    <form style="display:none" id="fSettings">
+        Select filesystem for settings and save and restore:<br><br>
+        <div id="idbHider" style="display:none;"><label><input name="a" type="radio" id="rIndexedDB" checked>IndexedDB (Need exit correctly to save changes)</label><br></div>
+        <label><input name="a" type="radio" id="rLocalStorage">LocalStorage (Sometimes not enough space)</label><br>
+        <label><input name="a" type="radio" id="rNone">None (in RAM)</label><br><br>
+        <hr>
+        Select game data source:<br><br>
+        <label>
+            <div id="pkgHider" style="display:none;"><input name="b" type="radio" id="rPackage">Emscripten package from server (cached in IndexedDB if available)</label><select id="selectPkg" style="display:none;"></select><br></div>
+        <label>
+            <div id="zipHider" style="display:none;"><input name="b" type="radio" id="rZip" checked>ZIP archive from server (slow, but small, no IndexedDB cache)</label><select id="selectZip" style="display:none;"></select><br></div>
+        <label><input name="b" type="radio" id="rLocalZip">Local ZIP file:</label><br>
+        <label id="label_file_select"><input type="file" name="c" id="iZipFile"><br><br>
+        <hr>
+        Command-line arguments: <input name="d" type="text" id="iArgs" value="-dev 1 -game valve"><br><br>
+        <input type="button" onclick="startXash(); return false;" value="Launch Xash3D!">
+        <br>
+        <hr>
+        <div id="linksPlaceholder" style="display:none;">Download archives to load locally next time:</div><br>
+    </form>
+</center>
 
-		<br>
-		<hr>
-
-		<div id='linksPlaceholder' style=display:none>Download archives to load locally next time:</div><br>
-	</form>
-
-	<script type='text/javascript' src='browserfs.min.js'></script>
-	<script type='text/javascript'>
-		var zipMods = [];
-		var pkgMods = [];
-	</script>
-
-	<script type='text/javascript' src='mods.js'></script>
-
+    <script src="browserfs.min.js"></script>
+    <script src="mods.js"></script>
 	<script type='text/javascript'>
 		var show_again = true;
 		var statusElement = document.getElementById('status');
