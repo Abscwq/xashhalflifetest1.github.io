@@ -38,44 +38,210 @@
         window.addEventListener('click', play_sound);
         window.addEventListener('keydown', play_sound);
     </script>
-    <style>
-        body {
-            background-color: #0d1117;
-            font-family: 'Segoe UI', sans-serif;
-            color: white;
-            margin: 0;
-            padding: 0;
-        }
+	<style>
+		body {
+			font-family: arial;
+			margin: 0;
+			padding: none;
+			background-color: #555555;
+			color: #f0b418;
+		}
 
-        h1 {
-            margin: 20px 0;
-        }
+		.emscripten {
+			padding-right: 0;
+			margin-left: auto;
+			margin-right: auto;
+			display: block;
+		}
 
-        a {
-            color: #4493f8;
-            text-decoration: none;
-            font-size: 1.2em;
-        }
+		div.emscripten {
+			text-align: center;
+		}
 
-        .container {
-            text-align: center;
-            padding: 20px;
-        }
+		div.emscripten_border {}
 
-        .github-buttons {
-            margin-top: 20px;
-        }
+		/* the canvas *must not* have any border or padding, or mouse coords will be wrong */
+		canvas.emscripten {
+			border: 0px none;
+			background-image: url(xd.png);
+			box-shadow: #ffa600 0px 0px 9px 4px;
+		}
 
-        @media (max-width: 600px) {
-            a {
-                font-size: 1em;
-            }
+		@-webkit-keyframes rotation {
+			from {
+				-webkit-transform: rotate(0deg);
+			}
 
-            .container {
-                padding: 10px;
-            }
-        }
-    </style>
+			to {
+				-webkit-transform: rotate(360deg);
+			}
+		}
+
+		@-moz-keyframes rotation {
+			from {
+				-moz-transform: rotate(0deg);
+			}
+
+			to {
+				-moz-transform: rotate(360deg);
+			}
+		}
+
+		@-o-keyframes rotation {
+			from {
+				-o-transform: rotate(0deg);
+			}
+
+			to {
+				-o-transform: rotate(360deg);
+			}
+		}
+
+		@keyframes rotation {
+			from {
+				transform: rotate(0deg);
+			}
+
+			to {
+				transform: rotate(360deg);
+			}
+		}
+
+
+		#controls {
+			display: inline-block;
+			float: right;
+			vertical-align: top;
+			margin-top: 5px;
+			margin-right: 20px;
+		}
+
+		#output {
+			width: 100%;
+			height: 200px;
+			margin: 0 auto;
+			margin-top: 10px;
+			border-left: 0px;
+			border-right: 0px;
+			border-style: solid;
+			padding-left: 0px;
+			padding-right: 0px;
+			display: none;
+			background-color: black;
+			color: rgba(0, 255, 0, 255);
+			font-family: 'Lucida Console', Monaco, monospace;
+			outline: none;
+			border-color: #f0B418;
+		}
+
+
+		.loader {
+			border: 4px solid #f3f3f3;
+			border-radius: 50%;
+			border-top: 4px solid #ffa600;
+			width: 16px;
+			height: 16px;
+			-webkit-animation: spin 2s linear infinite;
+			/* Safari */
+			animation: spin 2s linear infinite;
+		}
+
+		/* Safari */
+		@-webkit-keyframes spin {
+			0% {
+				-webkit-transform: rotate(0deg);
+			}
+
+			100% {
+				-webkit-transform: rotate(360deg);
+			}
+		}
+
+		@keyframes spin {
+			0% {
+				transform: rotate(0deg);
+			}
+
+			100% {
+				transform: rotate(360deg);
+			}
+		}
+
+
+
+		a.glow,
+		a.glow:hover,
+		a.glow:focus {
+			text-decoration: none;
+			color: #F0B418;
+			text-shadow: none;
+			-webkit-transition: 500ms linear 0s;
+			-moz-transition: 500ms linear 0s;
+			-o-transition: 500ms linear 0s;
+			transition: 500ms linear 0s;
+			outline: 0 none;
+			cursor: default;
+		}
+
+		a.glow:hover,
+		a.glow:focus {
+			color: #ffa600;
+			text-shadow: -1px 1px 8px #ffa600, 1px -1px 8px #ffa600;
+		}
+
+		input[type="button"i],
+		#label_file_select {
+			color: #f0b418;
+			background-color: #555555;
+			border: 2px solid #f0b418;
+			border-radius: 40px;
+			font-family: Segoe UI;
+			font-size: 20px;
+			transition: 0.5s all;
+		}
+
+		hr {
+			border-color: #ffa600;
+		}
+
+		input[type="button"i]:hover,
+		#label_file_select:hover {
+			color: #555555;
+			background-color: #f0b418;
+			font-size: 20px;
+		}
+
+		#label_file_select {
+			padding: 1px 6px;
+		}
+
+		input[type="file"i] {
+			display: none;
+		}
+
+		input[type="text"i] {
+			color: #f0b418;
+			background-color: #555555;
+			border: 2px solid #f0b418;
+			border-radius: 40px;
+			font-family: Segoe UI;
+			font-size: 15px;
+			transition: 0.5s all;
+		}
+
+		* {
+			cursor: default;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+			outline: none;
+		}
+
+		if (document.createElement("detect").style.textShadow==="") {
+			document.getElementsByTagName("html")[0].className+=" textshadow";
+		}
+	</style>
 </head>
 
 <center>
