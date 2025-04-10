@@ -2,42 +2,49 @@
 <html lang="en-us">
 
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="MobileOptimized" content="640">
-    <meta name="HandheldFriendly" content="true">
-    <title>Pixelsuft hl</title>
-    <script>
-        document.addEventListener('contextmenu', event => event.preventDefault());
+	<meta charset="utf-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="MobileOptimized" content="640" />
+	<meta name="HandheldFriendly" content="true" />
+	<title>Pixelsuft hl</title>
+	<script>
+		document.addEventListener('contextmenu', event => event.preventDefault());
+		window.onbeforeunload = function(e) {
+			// Cancel the event
+			e.preventDefault();
 
-        window.onbeforeunload = function (e) {
-            e.preventDefault();
-            e.returnValue = 'Really want to quit the game?';
-        };
+			// Chrome requires returnValue to be set
+			e.returnValue = 'Really want to quit the game?';
+		};
 
-        document.onkeydown = function (e) {
-            e = e || window.event;
-            if (!e.ctrlKey) return;
-            const code = e.which || e.keyCode;
-            if (code === 83 || code === 87) {
-                e.preventDefault();
-                e.stopPropagation();
-            }
-        };
+		//Prevent Ctrl+S (and Ctrl+W for old browsers and Edge)
+		document.onkeydown = function(e) {
+			e = e || window.event; //Get event
 
-        let pashalka_count = 0;
-        const audio = new Audio('music.mp3');
+			if (!e.ctrlKey) return;
 
-        function play_sound() {
-            if (pashalka_count === 40) audio.play();
-            if (pashalka_count < 100) pashalka_count += 1;
-        }
+			var code = e.which || e.keyCode; //Get key code
 
-        window.addEventListener('click', play_sound);
-        window.addEventListener('keydown', play_sound);
-    </script>
+			switch (code) {
+				case 83: //Block Ctrl+S
+				case 87: //Block Ctrl+W -- Not work in Chrome and new Firefox
+					e.preventDefault();
+					e.stopPropagation();
+					break;
+			}
+		};
+		var a = new Audio('music.mp3');
+		var pashalka_count = 0;
+
+		function play_sound() {
+			if (pashalka_count == 40) a.play();
+			if (pashalka_count < 100) pashalka_count += 1;
+		}
+		window.addEventListener('click', play_sound);
+		window.addEventListener('keydown', play_sound);
+	</script>
 	<style>
 		body {
 			font-family: arial;
@@ -244,7 +251,6 @@
 	</style>
 </head>
 
-<center>
 <body onerror=alert(event); bgcolor=#555555 text=#F0B418 link=#ffa600 vlink=#ffa600>
 	<div class="emscripten_border">
 		<canvas style="display:none" class="emscripten" id="canvas" oncontextmenu="event.preventDefault()"></canvas>
